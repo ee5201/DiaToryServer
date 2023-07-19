@@ -10,21 +10,21 @@ type User {
   age: Int
 }
 
-type Phone {
-  id: String
-  phone: String!
-  code: String!
-}
-
 type Query {
   fetchusers: [User!]!
-  fetchPhone: [Phone!]!
+  isVailNickName(nickname: String!): User!
+  isVailEmail(email: String!): User!
 }
 
 type Mutation {
-  signup(SignUpUser: CreateUserInput!): User!
-  phone(phone: String!): String!
-  vaildtaion(code: String!): String!
+  sendEmail(email: String!): User!
+  CheckAuthNumber(checkAuthNumberInput: CheckAuthNumberInput!): String!
+  CreateUser(SignUpUser: CreateUserInput!): User!
+}
+
+input CheckAuthNumberInput {
+  email: String!
+  authNumber: String!
 }
 
 input CreateUserInput {

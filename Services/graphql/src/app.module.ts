@@ -1,15 +1,16 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserMoudle } from './apis/user/user.module';
-import { PhoneMoudle } from './apis/phone/phone.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { RedisClientOptions } from 'redis';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
     UserMoudle,
-    PhoneMoudle,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -26,6 +27,26 @@ import { PhoneMoudle } from './apis/phone/phone.module';
       logging: true,
       migrationsRun: false,
       synchronize: true,
+    }),
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore,
+      url: 'redis://diaory-redis:6379',
+      isGlobal: true,
+    }),
+
+    MailerModule.forRootAsync({
+      useFactory: () => ({
+        transport: {
+          service: 'Gmail',
+          host: process.env.EMAIL_HOST,
+          port: Number(process.env.MAILER_PORT),
+          secure: false, // upgrade later with STARTTLS
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+          },
+        },
+      }),
     }),
   ],
 })
