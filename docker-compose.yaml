@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+  diatory-service:
+    build:
+      context: ./Services/graphql # 올바른 context 경로로 수정
+      dockerfile: Dockerfile
+    volumes:
+      - ./Services/graphql/src:/diatory-service/src
+    ports:
+      - 3000:3000
+    env_file:
+      - ./Services/graphql/.env.docker
+
+  diatory-mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: "diatory"
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - 3306:3306
+
+  diaory-mongodb:
+    image: mongo:5
+    ports:
+      - 27017:27017
+
+  diaory-redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
