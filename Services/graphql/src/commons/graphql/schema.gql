@@ -11,7 +11,7 @@ type User {
 }
 
 type Query {
-  fetchusers: [User!]!
+  fetchUser: User!
   isVailNickName(nickname: String!): User!
   isVailEmail(email: String!): User!
 }
@@ -20,6 +20,9 @@ type Mutation {
   sendEmail(email: String!): User!
   CheckAuthNumber(checkAuthNumberInput: CheckAuthNumberInput!): String!
   CreateUser(SignUpUser: CreateUserInput!): User!
+  login(email: String!, password: String!): String!
+  Logout: String!
+  resotreAccessToken: String!
 }
 
 input CheckAuthNumberInput {

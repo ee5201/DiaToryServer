@@ -1,7 +1,7 @@
 import { CreateUserInput } from '../dto/createUserInput';
 
 export interface IUserServiceCreateUser {
-  createSign: CreateUserInput;
+  createUserInput: CreateUserInput;
 }
 
 // 닉네임확인 타입

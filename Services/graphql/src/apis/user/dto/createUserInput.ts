@@ -13,5 +13,5 @@ export class CreateUserInput {
   password: string;
 
   @Field(() => String)
-  phone: string;
+  phone?: string;
 }

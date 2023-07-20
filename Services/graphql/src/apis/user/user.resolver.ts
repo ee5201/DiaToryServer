@@ -1,16 +1,27 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import { CreateUserInput } from './dto/createUserInput';
 import { CheckAuthNumberInput } from './dto/checkauthnumberInput';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
+import { IContext } from 'src/commons/interface/context';
 
 @Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
   // 유저 정보 불러오기
-  @Query(() => [User])
-  fetchusers(): Promise<User[]> {
-    return this.userService.fetchAll();
+  // @Query(() => [User])
+  // fetchusers(): Promise<User[]> {
+  //   return this.userService.fetchAll();
+  // }
+
+  //로그인 회원 조회
+  @UseGuards(GqlAuthGuard('access'))
+  @Query(() => User)
+  fetchUser(@Context() context: IContext): Promise<User> {
+    console.log(context.req.user);
+    return this.userService.findOneByUser({ userId: context.req.user.id });
   }
 
   //닉네임 중복 확인
@@ -41,8 +52,8 @@ export class UserResolver {
 
   //회원가입
   @Mutation(() => User)
-  CreateUser(@Args('SignUpUser') createSign: CreateUserInput) {
-    return this.userService.createUser({ createSign });
+  CreateUser(@Args('SignUpUser') createUserInput: CreateUserInput) {
+    return this.userService.createUserInput({ createUserInput });
   }
 
   //이메일 확인 로직

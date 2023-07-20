@@ -4,17 +4,33 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserMoudle } from './apis/user/user.module';
-import { MailerModule } from '@nestjs-modules/mailer';
+import { MailerModule } from '@nest-modules/mailer';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
+import { AuthModule } from './apis/auth/auth.module';
 
 @Module({
   imports: [
     UserMoudle,
+    AuthModule,
     ConfigModule.forRoot(),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: 'src/commons/graphql/schema.gql',
+      useFactory: () => ({
+        autoSchemaFile: 'src/commons/graphql/schema.gql',
+        context: ({ req, res }) => ({ req, res }),
+        cors: {
+          origin: [
+            'http://localhost:3000',
+            'http://localhost:3001',
+            'http://127.0.0.1:3000',
+            'http://127.0.0.1:3001',
+            'https://storage.googleapis.com',
+          ],
+          credentials: true,
+        },
+        uploads: false,
+      }),
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',

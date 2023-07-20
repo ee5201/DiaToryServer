@@ -16,7 +16,7 @@ import {
   IUsersFindOneNickName,
   IUsersSendToUser,
 } from './interface/user-service';
-import { MailerService } from '@nestjs-modules/mailer';
+import { MailerService } from '@nest-modules/mailer';
 import { Cache } from 'cache-manager';
 
 @Injectable()
@@ -31,6 +31,19 @@ export class UserService {
   //====================유저정보 불러오기=====================
   fetchAll(): Promise<User[]> {
     return this.UserRepository.find();
+  }
+
+  //로그인 회원 조회
+  async findOneByUser({ userId }) {
+    const user = await this.UserRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) throw new ConflictException('등록되지 않은 회원입니다.');
+    return {
+      ...user,
+    };
   }
 
   //===================유저 이메일 확인========================
@@ -140,8 +153,8 @@ export class UserService {
   }
 
   //===============회원가입============================
-  async createUser({ createSign }: IUserServiceCreateUser) {
-    const { nickname, email, password } = createSign;
+  async createUserInput({ createUserInput }: IUserServiceCreateUser) {
+    const { nickname, email, password } = createUserInput;
 
     if (!email.includes('@') || !email.includes('.')) {
       throw new ConflictException('이메일 형식이 다릅니다. 다시 확인해주세요');

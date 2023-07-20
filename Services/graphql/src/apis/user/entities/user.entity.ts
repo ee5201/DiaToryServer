@@ -27,7 +27,7 @@ export class User {
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
-  phone: string;
+  phone?: string;
 
   @Field(() => Int, { nullable: true })
   @Column({ nullable: true })
