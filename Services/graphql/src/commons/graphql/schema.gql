@@ -10,10 +10,23 @@ type User {
   age: Int
 }
 
+type Diary {
+  id: String!
+  title: String!
+  contents: String!
+  user: User
+}
+
+type DiaryCategory {
+  id: String!
+  name: String!
+}
+
 type Query {
   fetchUser: User!
   isVailNickName(nickname: String!): User!
   isVailEmail(email: String!): User!
+  fetchDairys(userFetch: String!): [Diary!]!
 }
 
 type Mutation {
@@ -23,6 +36,8 @@ type Mutation {
   login(email: String!, password: String!): String!
   Logout: String!
   resotreAccessToken: String!
+  CreateDiary(createDiary: CreateDiaryInput!): Diary!
+  createCategory(createCategory: CreateCategoryInput!): DiaryCategory!
 }
 
 input CheckAuthNumberInput {
@@ -34,5 +49,20 @@ input CreateUserInput {
   nickname: String!
   email: String!
   password: String!
-  phone: String!
+  phone: String
+}
+
+input CreateDiaryInput {
+  title: String!
+  contents: String!
+  userId: UserIdInput
+}
+
+input UserIdInput {
+  id: String!
+}
+
+input CreateCategoryInput {
+  id: String
+  name: String
 }

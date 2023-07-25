@@ -58,7 +58,7 @@ export class UserService {
     });
     return isVailEmail;
   }
-  //====================이메일 인증검증===========================
+  //====================이메일 전송하기===========================
   async sendEmail({ email }: IUsersCheckEmail): Promise<string> {
     if (!email || !email.includes('@') || !email.includes('.')) {
       throw new ConflictException('제대로된 이메일을 입력해주세요');
@@ -152,7 +152,7 @@ export class UserService {
     });
   }
 
-  //===============회원가입============================
+  //==============================회원가입============================
   async createUserInput({ createUserInput }: IUserServiceCreateUser) {
     const { nickname, email, password } = createUserInput;
 

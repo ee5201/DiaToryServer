@@ -8,11 +8,15 @@ import { MailerModule } from '@nest-modules/mailer';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { AuthModule } from './apis/auth/auth.module';
+import { DiaryModule } from './apis/diary/diary.module';
+import { DiarycategoryModule } from './apis/diaryCategories/diaryCategory.module';
 
 @Module({
   imports: [
     UserMoudle,
     AuthModule,
+    DiaryModule,
+    DiarycategoryModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,

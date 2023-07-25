@@ -12,6 +12,6 @@ export class CreateUserInput {
   @Field(() => String)
   password: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   phone?: string;
 }

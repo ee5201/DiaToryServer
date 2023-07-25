@@ -20,7 +20,6 @@ export class JwtGoogleStratgy extends PassportStrategy(Strategy, 'google') {
 
   async validate(_: string, __: string, profile: Profile) {
     console.log(profile);
-    const hashedPassword = await this.hashPassword('0');
     return {
       name: profile.displayName,
       email: profile._json.email,

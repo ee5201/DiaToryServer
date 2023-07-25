@@ -1,9 +1,13 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Diary } from 'src/apis/diary/entities/diary.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -16,14 +20,14 @@ export class User {
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
-  email: string;
+  email?: string;
 
   @Column({ nullable: true })
-  password: string;
+  password?: string;
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
-  nickname: string;
+  nickname?: string;
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
@@ -35,7 +39,6 @@ export class User {
 
   @CreateDateColumn()
   createAt: Date;
-
   @DeleteDateColumn()
   DeleteAt: Date;
 }

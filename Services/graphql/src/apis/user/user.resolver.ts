@@ -55,6 +55,4 @@ export class UserResolver {
   CreateUser(@Args('SignUpUser') createUserInput: CreateUserInput) {
     return this.userService.createUserInput({ createUserInput });
   }
-
-  //이메일 확인 로직
 }
