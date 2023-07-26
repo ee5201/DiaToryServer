@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { DiaryCategory } from 'src/apis/diaryCategories/entities/diarycategory.entity';
+import { FilesImages } from 'src/apis/files/entities/files.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
@@ -9,6 +10,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToOne,
+  OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -36,6 +38,11 @@ export class Diary {
   @ManyToOne(() => DiaryCategory)
   @Field(() => DiaryCategory, { nullable: true })
   diaryCategory: DiaryCategory;
+  @OneToMany(() => FilesImages, (fileimage) => fileimage.user, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => FilesImages)
+  fileImages: FilesImages;
 
   @CreateDateColumn()
   createAt: Date;

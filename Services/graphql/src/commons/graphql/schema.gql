@@ -25,12 +25,21 @@ type DiaryCategory {
   name: String!
 }
 
+type FilesImages {
+  id: String
+  size: Float
+  url: String
+  diary: Diary!
+  user: User!
+}
+
 type Diary {
   id: String!
   title: String!
   contents: String!
   user: User
   diaryCategory: DiaryCategory
+  fileImages: FilesImages!
 }
 
 type User {
@@ -40,6 +49,7 @@ type User {
   phone: String
   age: Int
   boardcomment: BoardComment!
+  fileImages: FilesImages!
 }
 
 type Query {
@@ -65,7 +75,7 @@ type Mutation {
   likeBoard(boardId: String!): Reviewboard!
   dislikeBoard(boardId: String!): Reviewboard!
   createReviewBoard(createReviewBoardInput: CreateReviewBoardInput!): Reviewboard!
-  uploadFile(file: Upload!): String!
+  uploadFile(file: Upload!): FilesImages!
 }
 
 input CheckAuthNumberInput {

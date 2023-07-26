@@ -1,6 +1,8 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { FileUpload } from 'graphql-upload';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Diary } from 'src/apis/diary/entities/diary.entity';
+import { User } from 'src/apis/user/entities/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -17,4 +19,10 @@ export class FilesImages {
   @Field(() => String, { nullable: true })
   url: string;
   file: FileUpload;
+  @ManyToOne(() => Diary)
+  @Field(() => Diary)
+  diary: Diary;
+  @ManyToOne(() => User)
+  @Field(() => User)
+  user: User;
 }

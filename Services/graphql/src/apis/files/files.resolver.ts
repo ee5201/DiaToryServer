@@ -7,7 +7,7 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload';
 export class FilesResolver {
   constructor(private readonly filesserivce: FilesService) {}
 
-  @Mutation(() => String)
+  @Mutation(() => FilesImages)
   uploadFile(
     @Args({ name: 'file', type: () => GraphQLUpload }) file: FileUpload,
   ): Promise<FilesImages> {

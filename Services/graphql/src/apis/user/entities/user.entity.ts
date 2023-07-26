@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BoardComment } from 'src/apis/BoardComment/entities/boardComment.entity';
 import { Diary } from 'src/apis/diary/entities/diary.entity';
+import { FilesImages } from 'src/apis/files/entities/files.entity';
 import { Reviewboard } from 'src/apis/reviewboards/entities/reviewboard.entity';
 
 import {
@@ -55,6 +56,11 @@ export class User {
   @Field(() => BoardComment)
   boardcomment: BoardComment;
   diary: Diary[];
+  @OneToMany(() => FilesImages, (fileimage) => fileimage.user, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => FilesImages)
+  fileImages: FilesImages;
   @CreateDateColumn()
   createAt: Date;
   @DeleteDateColumn()

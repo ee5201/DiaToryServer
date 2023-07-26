@@ -49,22 +49,4 @@ export class FilesService {
     });
     return newFile;
   }
-  // async upload({ file }): Promise<string> {
-  //   const storage = new Storage({
-  //     projectId: 'nifty-gasket-394013',
-  //     keyFilename: 'nifty-gasket-394013-f41186e90c80.json',
-  //   }).bucket('diatoryprojects');
-
-  //   file
-  //     .createReadStream()
-  //     .pipe(storage.file(file.filename).createWriteStream())
-  //     .on('finish', async () => {
-  //       console.log('성공');
-  //     })
-  //     .on('error', async () => {
-  //       console.log('실패');
-  //     });
-  //   console.log('전송완료');
-  //   return '끝';
-  // }
 }
