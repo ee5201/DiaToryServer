@@ -10,6 +10,8 @@ import * as redisStore from 'cache-manager-redis-store';
 import { AuthModule } from './apis/auth/auth.module';
 import { DiaryModule } from './apis/diary/diary.module';
 import { DiarycategoryModule } from './apis/diaryCategories/diaryCategory.module';
+import { ReviewboardModule } from './apis/reviewboards/reviewboard.module';
+import { FilesModule } from './apis/files/files.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { DiarycategoryModule } from './apis/diaryCategories/diaryCategory.module
     AuthModule,
     DiaryModule,
     DiarycategoryModule,
+    ReviewboardModule,
+    FilesModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,

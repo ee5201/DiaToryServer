@@ -2,19 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: String!
-  email: String
-  nickname: String
-  phone: String
-  age: Int
-}
-
-type Diary {
+type Reviewboard {
   id: String!
   title: String!
   contents: String!
-  user: User
+  likescount: Int!
+  dislikescount: Int!
+  user: User!
+  boardcomment: BoardComment!
+}
+
+type BoardComment {
+  id: String!
+  NickName: String!
+  contents: String!
+  reviewboard: Reviewboard!
+  user: User!
 }
 
 type DiaryCategory {
@@ -22,11 +25,30 @@ type DiaryCategory {
   name: String!
 }
 
+type Diary {
+  id: String!
+  title: String!
+  contents: String!
+  user: User
+  diaryCategory: DiaryCategory
+}
+
+type User {
+  id: String!
+  email: String
+  nickname: String
+  phone: String
+  age: Int
+  boardcomment: BoardComment!
+}
+
 type Query {
   fetchUser: User!
   isVailNickName(nickname: String!): User!
   isVailEmail(email: String!): User!
-  fetchDairys(userFetch: String!): [Diary!]!
+  fetchDairys: [Diary!]!
+  fetchCategory(name: String!): DiaryCategory!
+  fetchCategorys: [DiaryCategory!]!
 }
 
 type Mutation {
@@ -37,7 +59,13 @@ type Mutation {
   Logout: String!
   resotreAccessToken: String!
   CreateDiary(createDiary: CreateDiaryInput!): Diary!
+  UpdateDiary(diaryId: String!, updatediaryinput: Updatediaryinput!): Diary!
   createCategory(createCategory: CreateCategoryInput!): DiaryCategory!
+  updateCategory(categoryId: String!, updateCategoryInput: UpdateCategoryInput!): DiaryCategory!
+  likeBoard(boardId: String!): Reviewboard!
+  dislikeBoard(boardId: String!): Reviewboard!
+  createReviewBoard(createReviewBoardInput: CreateReviewBoardInput!): Reviewboard!
+  uploadFile(file: Upload!): String!
 }
 
 input CheckAuthNumberInput {
@@ -55,14 +83,29 @@ input CreateUserInput {
 input CreateDiaryInput {
   title: String!
   contents: String!
-  userId: UserIdInput
+  Categoryid: String!
 }
 
-input UserIdInput {
-  id: String!
+input Updatediaryinput {
+  title: String!
+  contents: String!
+  createCategoryId: String
 }
 
 input CreateCategoryInput {
-  id: String
+  name: String!
+}
+
+input UpdateCategoryInput {
   name: String
 }
+
+input CreateReviewBoardInput {
+  title: String!
+  contents: String!
+  likescount: Int
+  dislikescount: Int
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload

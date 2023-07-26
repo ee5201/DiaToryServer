@@ -1,5 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { BoardComment } from 'src/apis/BoardComment/entities/boardComment.entity';
 import { Diary } from 'src/apis/diary/entities/diary.entity';
+import { Reviewboard } from 'src/apis/reviewboards/entities/reviewboard.entity';
+
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +11,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -37,6 +41,20 @@ export class User {
   @Column({ nullable: true })
   age?: number;
 
+  @OneToMany(() => Diary, (diary) => diary.user, {
+    onDelete: 'CASCADE',
+  })
+  @OneToMany(() => Reviewboard, (reviewboard) => reviewboard.user, {
+    onDelete: 'CASCADE',
+  })
+  reviewboard: [Reviewboard];
+
+  @OneToMany(() => BoardComment, (boardcomment) => boardcomment.user, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => BoardComment)
+  boardcomment: BoardComment;
+  diary: Diary[];
   @CreateDateColumn()
   createAt: Date;
   @DeleteDateColumn()

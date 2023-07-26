@@ -1,14 +1,15 @@
-import { Field, InputType, PartialType } from '@nestjs/graphql';
+import { Field, InputType, PartialType, extend } from '@nestjs/graphql';
 import { Diary } from '../entities/diary.entity';
-import { UserIdInput } from 'src/apis/user/dto/UserIdInput';
 import { CreateCategoryInput } from 'src/apis/diaryCategories/dto/createDiaryCategoryInput';
+import { UserIdInput } from 'src/apis/user/dto/UserIdInput';
 
 @InputType()
-export class CreateDiaryInput {
+export class Updatediaryinput {
   @Field(() => String)
   title: string;
   @Field(() => String)
   contents: string;
-  @Field(() => String)
-  Categoryid: string;
+
+  @Field(() => String, { nullable: true })
+  createCategoryId: string;
 }

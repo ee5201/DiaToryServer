@@ -10,5 +10,6 @@ import { DiaryCategory } from './entities/diarycategory.entity';
     DiarycategoryResolver, //
     DiarycategoryService,
   ],
+  exports: [DiarycategoryService],
 })
 export class DiarycategoryModule {}

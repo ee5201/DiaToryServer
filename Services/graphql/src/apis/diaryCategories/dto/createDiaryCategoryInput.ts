@@ -1,8 +1,9 @@
-import { InputType, PartialType } from '@nestjs/graphql';
+import { InputType, PartialType, PickType } from '@nestjs/graphql';
 import { DiaryCategory } from '../entities/diarycategory.entity';
 
 @InputType()
-export class CreateCategoryInput extends PartialType(
+export class CreateCategoryInput extends PickType(
   DiaryCategory,
+  ['name'],
   InputType,
 ) {}

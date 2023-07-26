@@ -7,7 +7,7 @@ export class DiaryCategory {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
+  @Column({ unique: true })
   @Field(() => String)
-  @Column()
   name: string;
 }

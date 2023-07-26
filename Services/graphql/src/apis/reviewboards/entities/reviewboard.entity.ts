@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { DiaryCategory } from 'src/apis/diaryCategories/entities/diarycategory.entity';
+import { BoardComment } from 'src/apis/BoardComment/entities/boardComment.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
@@ -9,34 +9,41 @@ import {
   JoinColumn,
   JoinTable,
   ManyToOne,
-  PrimaryColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
 @ObjectType()
-export class Diary {
+export class Reviewboard {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
-  @Field(() => String)
   @Column()
+  @Field(() => String)
   title: string;
-
-  @Field(() => String)
   @Column()
+  @Field(() => String)
   contents: string;
-
+  @Column({ default: 0 })
+  @Field(() => Int)
+  likescount?: number;
+  @Column({ default: 0 })
+  @Field(() => Int)
+  dislikescount?: number;
   @JoinColumn()
-  @ManyToOne(() => User, (user) => user.diary, {
+  @ManyToOne(() => User, (user) => user.reviewboard, {
     onDelete: 'CASCADE',
   })
-  @Field(() => User, { nullable: true })
+  @Field(() => User)
   user: User;
-  @ManyToOne(() => DiaryCategory)
-  @Field(() => DiaryCategory, { nullable: true })
-  diaryCategory: DiaryCategory;
+  @OneToMany(() => BoardComment, (boardcomment) => boardcomment.reviewboard, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => BoardComment)
+  boardcomment: BoardComment;
 
+  @JoinTable()
   @CreateDateColumn()
   createAt: Date;
   @DeleteDateColumn()
