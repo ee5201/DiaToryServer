@@ -16,6 +16,7 @@ import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Cache } from 'cache-manager';
+import { Token } from './dto/Objectauth-service';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,7 @@ export class AuthService {
   getAccessToken({ user }: IAuthServiceGetAccessToken): string {
     return this.jwtService.sign(
       { sub: user.id },
-      { secret: '나의비밀번호', expiresIn: '1h' }, //
+      { secret: 'access', expiresIn: '1h' }, //
     );
   }
 
@@ -53,8 +54,12 @@ export class AuthService {
   }
 
   //restore
-  restoreAccessToken({ user }: IAuthServiceRestoreAccessToken) {
-    return this.getAccessToken({ user });
+  async restoreAccessToken({
+    user,
+  }: IAuthServiceRestoreAccessToken): Promise<Token> {
+    const accessToken = this.getAccessToken({ user });
+    const token: Token = { accessToken };
+    return Promise.resolve(token);
   }
 
   //소셜 로그인
@@ -67,13 +72,13 @@ export class AuthService {
         createUserInput: req.user,
       });
     this.SetReFreshToken({ user, res });
-    res.redirect('http://localhost:3001/test');
+    res.redirect('http://localhost:3001/AfterLoginHomePage');
   }
 
   //로그아웃
   async Logout({ req }: IAuthServiceLogout): Promise<string> {
-    const refreshToken = req.cookies.split('=')[1];
-    const accessToken = req.headers.authorization.split('')[1];
+    const refreshToken = req.headers.cookie?.replace('refreshToken=', '');
+    const accessToken = req.headers.authorization?.replace('Bearer ', '');
     try {
       this.jwtService.verify(refreshToken, {
         secret: 'refresh',
@@ -84,15 +89,19 @@ export class AuthService {
     } catch (error) {
       throw new UnprocessableEntityException('');
     }
-    return '로그아웃';
+    await Promise.all([
+      this.cacheManager.set(`refreshToken=${refreshToken}`, 'refresh', {
+        ttl: 604800,
+      }),
+      this.cacheManager.set(`accessToken=${accessToken}`, 'access', {
+        ttl: 3600,
+      }),
+    ]);
+    return '로그아웃에 성공하였습니다.';
   }
 
   // 로그인 진행 로직
-  async login({
-    email,
-    password,
-    context,
-  }: IAuthSerivceLogin): Promise<string> {
+  async login({ email, password, context }: IAuthSerivceLogin): Promise<Token> {
     // 1. 이메일이 일치하는지 확인
     const user = await this.userService.findOneByEmail({ email });
     if (!user) throw new UnprocessableEntityException('이메일이 없습니다.');
@@ -104,6 +113,8 @@ export class AuthService {
 
     //리프레시 토큰
     this.SetReFreshToken({ user, res: context.res });
-    return this.getAccessToken({ user });
+    const accessToken = this.getAccessToken({ user });
+    const token: Token = { accessToken }; // Token 객체 생성
+    return token;
   }
 }

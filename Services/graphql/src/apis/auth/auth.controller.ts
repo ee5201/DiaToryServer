@@ -17,4 +17,20 @@ export class AuthController {
   ) {
     return this.authservice.socialLogin({ req, res });
   }
+  @Get('/login/naver')
+  @UseGuards(GqlAuthGuard('naver'))
+  loginnaver(
+    @Req() req: Request & IOAuthUser, //
+    @Res() res: Response,
+  ) {
+    return this.authservice.socialLogin({ req, res });
+  }
+  @Get('/login/kakao')
+  @UseGuards(GqlAuthGuard('kakao'))
+  loginkakao(
+    @Req() req: Request & IOAuthUser, //
+    @Res() res: Response,
+  ) {
+    return this.authservice.socialLogin({ req, res });
+  }
 }

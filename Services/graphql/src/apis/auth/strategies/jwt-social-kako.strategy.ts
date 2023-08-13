@@ -1,18 +1,19 @@
-// import { PassportStrategy } from '@nestjs/passport';
-// import { Strategy } from 'passport-kakao';
+import { PassportStrategy } from '@nestjs/passport';
+import { Profile, Strategy } from 'passport-kakao';
 
-// export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
-//   constructor() {
-//     super({
-//       clientID: process.env.KAKAO_CLIENT_ID,
-//       clientSecret: process.env.KAKAO_CLIENT_SECRET,
-//       callbackURL: 'https://api.upco.space/login/kakao',
-//     });
-//   }
+export class JwtKakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
+  constructor() {
+    super({
+      clientID: 'cb3b27e55449379fc15d05f81ab54d1b',
+      clientSecret: 'OIh1ktkiTKEusm0o2MZfIxqiGa3rMSLO',
+      callbackURL: 'http://localhost:3000/login/kakao',
+      scope: ['account_email', 'profile_nickname'],
+    });
+  }
 
-//   validate(_, __, profile) {
-//     return {
-//       id: profile.id,
-//     };
-//   }
-// }
+  validate(_: string, __: string, profile: Profile) {
+    return {
+      id: profile.id,
+    };
+  }
+}

@@ -1,6 +1,7 @@
 import { CACHE_MANAGER, Inject, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Cache } from 'cache-manager';
+import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 export class JwtRefreshStratgy extends PassportStrategy(Strategy, 'refresh') {
@@ -11,16 +12,17 @@ export class JwtRefreshStratgy extends PassportStrategy(Strategy, 'refresh') {
     super({
       jwtFromRequest: (req) => {
         console.log(req);
-        const refreshToken = req.headers.cookie.split('=')[1];
+        const cookie = req.headers.cookie;
+        const refreshToken = cookie?.replace('refreshToken=', '');
         return refreshToken;
       },
       secretOrKey: 'refresh',
       passReqToCallback: true,
     });
   }
-  async validate(req, payload) {
+  async validate(req: Request, payload) {
     console.log(payload);
-    const refreshToken = req.headers.cookie.split('=')[1];
+    const refreshToken = req.headers.cookie?.replace('refreshToken=', '');
     const redisRefreshToken = await this.cacheManager.get(
       `refreshToken:${refreshToken}`,
     );
@@ -29,7 +31,7 @@ export class JwtRefreshStratgy extends PassportStrategy(Strategy, 'refresh') {
 
     return {
       id: payload.sub,
-      exp: payload.exp,
+      email: payload.sub.email,
     };
   }
 }
